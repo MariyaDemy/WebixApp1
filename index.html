@@ -1,100 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Webix First App</title>
-    <script type="text/javascript" src="http://cdn.webix.com/edge/webix.js"></script>
-    <link rel="stylesheet" type="text/css" href="http://cdn.webix.com/edge/webix.css">
+    <script
+      type="text/javascript"
+      src="http://cdn.webix.com/edge/webix.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="http://cdn.webix.com/edge/webix.css"
+    />
     <script type="text/javascript" src="./testdata.js"></script>
     <style type="text/css">
-       .webix_template {
-           text-align: center;
-       }
-       .webix_list {
-           background-color:rgb(233, 233, 236);
-       }
-       .header {
-            background-color: rgb(6 35 53 / 54%);
-       }
-       .webix_secondary .webix_button .webix_icon_btn {
-           color: #fff;
-       }
-       .myBtn .webix_button, .myBtn .webix_button:hover,
-       .myBtn .webix_button:active, .myBtn .webix_button:focus{
-           color:#fff;
-           background-color: inherit;
-       }
-       .myLabel .webix_el_box {
-           color: #fff;
-           font-size: 18px;
-       }
+      .webix_template {
+        text-align: center;
+      }
+      .webix_list {
+        background-color: rgb(233, 233, 236);
+      }
+      .greenLabel .webix_el_box {
+        color: #138137;
+        text-align: center;
+        background-color: rgb(233, 233, 236);
+      }
+      .header {
+        background-color: rgb(6 35 53 / 54%);
+      }
+      .webix_secondary .webix_button .webix_icon_btn {
+        color: #fff;
+      }
+      .myBtn .webix_button,
+      .myBtn .webix_button:hover,
+      .myBtn .webix_button:active,
+      .myBtn .webix_button:focus {
+        color: #fff;
+        background-color: inherit;
+      }
+      .myLabel .webix_el_box {
+        color: #fff;
+        font-size: 18px;
+      }
     </style>
-</head>
-<body>
-    <div id="my_link" style='display:none;'>The software is provided by <a href="https://webix.com" target="_blank">https://webix.com</a>. All rights reserved (c)</div>
+  </head>
+  <body>
+    <div id="my_link" style="display: none">
+      The software is provided by
+      <a href="https://webix.com" target="_blank">https://webix.com</a>. All
+      rights reserved (c)
+    </div>
 
     <script type="text/javascript" charset="utf-8">
+      let header = {
+        padding: 10,
+        css: "header",
+        cols: [
+          { view: "label", label: "My App", css: "myLabel" },
+          {
+            view: "button",
+            type: "icon",
+            icon: "wxi-user",
+            label: "Profile",
+            maxWidth: 100,
+            css: "myBtn",
+          },
+        ],
+      };
 
-        let header = { padding: 10, css: "header",
-			cols:[
-                { view:"label", label: "My App", css: "myLabel"},
-				{ view:"button", type:"icon", icon:"wxi-user",
-                label:"Profile", maxWidth: 100,
-                css: "myBtn"}
-			]
-		};
+      let list = {
+        view: "list",
+        scroll: false,
+        maxWidth: 200,
+        data: ["Dashboard", "Users", "Products", "Locations"],
+      };
 
-        let list = {
-            view:"list", scroll:false, autoheight:true, maxWidth: 200,
-			data:["Dashboard", "Users", "Products", "Locations"]
-        }
+      let label = {
+        view: "label",
+        label: "<span class='webix_icon wxi-check'></span> Connected",
+        css: "greenLabel",
+      };
 
-        let datatable = {
-            view:"datatable",
-                    scrollX: false,  
-                    scrollY: true,                     
-                    data: small_film_set,
-			        autoConfig:true,
-                    height: 530
-        }
+      let datatable = {
+        view: "datatable",
+        scrollX: false,
+        scrollY: true,
+        data: small_film_set,
+        autoConfig: true,
+      };
 
-        let form = {
-            view: "form",
-                maxWidth: 300,
-                elements:[
-                { type:"section", template:"Edit Films" },
-                { view:"text", label:"Title", height: 50},
-                { view:"text", type:"number", label:"Year", height: 50},
-                { view:"text", type:"number", label:"Rating", height: 50},
-                { view:"text", type:"number", label:"Votes", height: 50},
-                { margin:15, cols:[
-                { view:"button", value:"Add new" , css:"webix_primary"},
-                { view:"button", value:"Clear"}]}]
-            }
+      let form = {
+        view: "form",
+        maxWidth: 300,
+        elements: [
+          { type: "section", template: "Edit Films" },
+          { view: "text", label: "Title", height: 50 },
+          { view: "text", type: "number", label: "Year", height: 50 },
+          { view: "text", type: "number", label: "Rating", height: 50 },
+          { view: "text", type: "number", label: "Votes", height: 50 },
+          {
+            margin: 15,
+            cols: [
+              { view: "button", value: "Add new", css: "webix_primary" },
+              { view: "button", value: "Clear" },
+            ],
+          },
+          { view: "spacer" },
+        ],
+      };
 
-        let main = { 
-			cols:[ list,
-                { view:"resizer"},
-                datatable,
-                form]
-		};
+      let main = {
+        cols: [{ rows: [list, label] }, { view: "resizer" }, datatable, form],
+      };
 
-        let footer = { 
-			rows:[
-                {view: "template", 
-                template: "html->my_link"                           
-            }
-			]
-		};
+      let footer = {
+        rows: [{ view: "template", template: "html->my_link", height: 30 }],
+      };
 
-        
-        webix.ui({
-            rows:[header, main, footer]                
-        });
-          
+      webix.ui({
+        rows: [header, main, footer],
+      });
     </script>
-
-</body>
+  </body>
 </html>
