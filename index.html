@@ -36,8 +36,7 @@
       .myBtn .webix_button,
       .myBtn .webix_button:hover,
       .myBtn .webix_button:focus,
-      .myBtn .webix_button:active
-      {
+      .myBtn .webix_button:active {
         color: #fff;
         background-color: inherit;
       }
@@ -69,7 +68,13 @@
             maxWidth: 100,
             css: "myBtn",
             click: function () {
-              $$("popup").show($$("profile").getNode(), { pos: "bottom", x: 0, y: 5 });
+              if (!$$("popup").isVisible()) {
+                $$("popup").show($$("profile").getNode(), {
+                  pos: "bottom",
+                  x: 0,
+                  y: 5,
+                });
+              }
             },
           },
         ],
@@ -105,14 +110,20 @@
         maxWidth: 300,
         elements: [
           { type: "section", template: "Edit Films" },
-          { view: "text", label: "Title", height: 50, name: "title", invalidMessage:"Enter a title" },
+          {
+            view: "text",
+            label: "Title",
+            height: 50,
+            name: "title",
+            invalidMessage: "Enter a title",
+          },
           {
             view: "text",
             type: "number",
             label: "Year",
             height: 50,
             name: "year",
-            invalidMessage:"Enter a year between 1970 and current"
+            invalidMessage: "Enter a year between 1970 and current",
           },
           {
             view: "text",
@@ -120,7 +131,7 @@
             label: "Rating",
             height: 50,
             name: "rating",
-            invalidMessage:"Enter a number except 0"
+            invalidMessage: "Enter a number except 0",
           },
           {
             view: "text",
@@ -128,7 +139,7 @@
             label: "Votes",
             height: 50,
             name: "votes",
-            invalidMessage:"Enter a number less than 100000"
+            invalidMessage: "Enter a number less than 100000",
           },
           {
             margin: 15,
@@ -138,12 +149,12 @@
                 value: "Add new",
                 css: "webix_primary",
                 click: function () {
-                  if($$("myform").validate()){
-                    let values = $$("myform").getValues();
+                  const form = $$("myform");
+                  if (form.validate()) {
+                    let values = form.getValues();
                     $$("mydata").add(values);
-                    webix.message("The form is completed properly");   
-
-                  }                  
+                    webix.message("The form is completed properly");
+                  }
                 },
               },
               {
@@ -156,8 +167,9 @@
                       text: "Do you still want to continue?",
                     })
                     .then(function () {
-                      $$("myform").clear();
-                      $$("myform").clearValidation();
+                      const form = $$("myform");
+                      form.clear();
+                      form.clearValidation();
                     });
                 },
               },
@@ -190,7 +202,6 @@
       webix.ui({
         view: "popup",
         id: "popup",
-        move: true,
         body: {
           view: "list",
           data: ["Settings", "Log Out"],
