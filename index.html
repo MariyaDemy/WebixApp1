@@ -35,8 +35,8 @@
       }
       .myBtn .webix_button,
       .myBtn .webix_button:hover,
-      .myBtn .webix_button:active,
-      .myBtn .webix_button:focus {
+      .myBtn .webix_button:focus,
+      .myBtn .webix_button:active {
         color: #fff;
         background-color: inherit;
       }
@@ -61,11 +61,21 @@
           { view: "label", label: "My App", css: "myLabel" },
           {
             view: "button",
+            id: "profile",
             type: "icon",
             icon: "wxi-user",
             label: "Profile",
             maxWidth: 100,
             css: "myBtn",
+            click: function () {
+              if (!$$("popup").isVisible()) {
+                $$("popup").show($$("profile").getNode(), {
+                  pos: "bottom",
+                  x: 0,
+                  y: 5,
+                });
+              }
+            },
           },
         ],
       };
@@ -85,30 +95,100 @@
 
       let datatable = {
         view: "datatable",
+        id: "mydata",
         scrollX: false,
         scrollY: true,
         data: small_film_set,
         autoConfig: true,
       };
 
+      let today = new Date();
+
       let form = {
         view: "form",
+        id: "myform",
         maxWidth: 300,
         elements: [
           { type: "section", template: "Edit Films" },
-          { view: "text", label: "Title", height: 50 },
-          { view: "text", type: "number", label: "Year", height: 50 },
-          { view: "text", type: "number", label: "Rating", height: 50 },
-          { view: "text", type: "number", label: "Votes", height: 50 },
+          {
+            view: "text",
+            label: "Title",
+            height: 50,
+            name: "title",
+            invalidMessage: "Enter a title",
+          },
+          {
+            view: "text",
+            type: "number",
+            label: "Year",
+            height: 50,
+            name: "year",
+            invalidMessage: "Enter a year between 1970 and current",
+          },
+          {
+            view: "text",
+            type: "number",
+            label: "Rating",
+            height: 50,
+            name: "rating",
+            invalidMessage: "Enter a number except 0",
+          },
+          {
+            view: "text",
+            type: "number",
+            label: "Votes",
+            height: 50,
+            name: "votes",
+            invalidMessage: "Enter a number less than 100000",
+          },
           {
             margin: 15,
             cols: [
-              { view: "button", value: "Add new", css: "webix_primary" },
-              { view: "button", value: "Clear" },
+              {
+                view: "button",
+                value: "Add new",
+                css: "webix_primary",
+                click: function () {
+                  const form = $$("myform");
+                  if (form.validate()) {
+                    let values = form.getValues();
+                    $$("mydata").add(values);
+                    webix.message("The form is completed properly");
+                  }
+                },
+              },
+              {
+                view: "button",
+                value: "Clear",
+                click: function () {
+                  webix
+                    .confirm({
+                      title: "Form will be cleared",
+                      text: "Do you still want to continue?",
+                    })
+                    .then(function () {
+                      const form = $$("myform");
+                      form.clear();
+                      form.clearValidation();
+                    });
+                },
+              },
             ],
           },
           { view: "spacer" },
         ],
+        rules: {
+          title: webix.rules.isNotEmpty,
+          year: function (value) {
+            return value >= 1970 && value <= today.getFullYear();
+          },
+          rating: function (value) {
+            return value != 0 && webix.rules.isNotEmpty(value);
+          },
+          votes: function (value) {
+            return value < 100000;
+          },
+        },
       };
 
       let main = {
@@ -118,6 +198,17 @@
       let footer = {
         rows: [{ view: "template", template: "html->my_link", height: 30 }],
       };
+
+      webix.ui({
+        view: "popup",
+        id: "popup",
+        body: {
+          view: "list",
+          data: ["Settings", "Log Out"],
+          scroll: false,
+          autoheight: true,
+        },
+      });
 
       webix.ui({
         rows: [header, main, footer],
