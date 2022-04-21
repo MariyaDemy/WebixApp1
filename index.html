@@ -14,7 +14,9 @@
       type="text/css"
       href="http://cdn.webix.com/edge/webix.css"
     />
-    <script type="text/javascript" src="./testdata.js"></script>
+    <link rel="stylesheet" type="text/css" href="codebase/skins/material.css" />
+    <script type="text/javascript" src="./users.js"></script>
+
     <style type="text/css">
       .webix_template {
         text-align: center;
@@ -43,6 +45,12 @@
       .myLabel .webix_el_box {
         color: #fff;
         font-size: 18px;
+      }
+      .gray {
+        background-color: #f4f5f9;
+      }
+      .myhover.webix_cell {
+        background: rgb(181, 228, 217);
       }
     </style>
   </head>
@@ -84,7 +92,13 @@
         view: "list",
         scroll: false,
         maxWidth: 200,
-        data: ["Dashboard", "Users", "Products", "Locations"],
+        select: true,
+        on: {
+          onAfterSelect: function (id) {
+            $$(id).show();
+          },
+        },
+        data: ["Dashboard", "Users", "Products", "Admin"],
       };
 
       let label = {
@@ -93,13 +107,58 @@
         css: "greenLabel",
       };
 
+      const valuesToForm = (id) => {
+        let values = $$("mydata").getItem(id);
+        $$("myform").setValues(values);
+      };
+
       let datatable = {
         view: "datatable",
         id: "mydata",
         scrollX: false,
         scrollY: true,
-        data: small_film_set,
-        autoConfig: true,
+        columns: [
+          { id: "id", header: "", width: 50, css: "gray", sort: "int" },
+          {
+            id: "title",
+            header: ["Film title", { content: "textFilter" }],
+            fillspace: true,
+            sort: "string",
+          },
+          {
+            id: "year",
+            header: ["Year", { content: "selectFilter" }],
+            sort: "int",
+          },
+          {
+            id: "votes",
+            header: ["Votes", { content: "textFilter" }],
+            sort: "int",
+          },
+          {
+            id: "rating",
+            header: ["Rating", { content: "textFilter" }],
+            sort: "int",
+          },
+          {
+            id: "rank",
+            header: ["Rank", { content: "textFilter" }],
+            sort: "int",
+          },
+          { id: "del", header: "", template: "{common.trashIcon()}" },
+        ],
+        onClick: {
+          "wxi-trash": function (event, id) {
+            this.remove(id);
+            return false;
+          },
+        },
+        url: "data.js",
+        select: true,
+        on: {
+          onAfterSelect: valuesToForm,
+        },
+        hover: "myhover",
       };
 
       let today = new Date();
@@ -127,7 +186,6 @@
           },
           {
             view: "text",
-            type: "number",
             label: "Rating",
             height: 50,
             name: "rating",
@@ -135,7 +193,6 @@
           },
           {
             view: "text",
-            type: "number",
             label: "Votes",
             height: 50,
             name: "votes",
@@ -154,6 +211,19 @@
                     let values = form.getValues();
                     $$("mydata").add(values);
                     webix.message("The form is completed properly");
+                  }
+                },
+              },
+              {
+                view: "button",
+                value: "Update",
+                css: "webix_primary",
+                click: function () {
+                  const form = $$("myform");
+                  const data = $$("mydata");
+                  let values = form.getValues();
+                  if (values.id) {
+                    data.updateItem(values.id, values);
                   }
                 },
               },
@@ -191,8 +261,103 @@
         },
       };
 
+      let toolbar = {
+        view: "toolbar",
+        cols: [
+          {
+            view: "text",
+            id: "usersList_input",
+            on: {
+              onTimedKeyPress: function (id) {
+                let value = this.getValue().toLowerCase();
+                $$("usersList").filter("#name#", value);
+              },
+            },
+          },
+
+          {
+            view: "button",
+            value: "Sort asc",
+            maxWidth: 100,
+            css: "webix_primary",
+            click: function () {
+              $$("usersList").sort("#name#", "asc", "string");
+            },
+          },
+          {
+            view: "button",
+            value: "Sort desc",
+            maxWidth: 100,
+            css: "webix_primary",
+            click: function () {
+              $$("usersList").sort("#name#", "desc", "string");
+            },
+          },
+        ],
+      };
+
+      let usersList = {
+        view: "list",
+        id: "usersList",
+        template:
+          "#name# from #country# <span class='webix_icon wxi-close'></span>",
+        data: webix.copy(users),
+        onClick: {
+          "wxi-close": function (e, id) {
+            this.remove(id);
+            return false;
+          },
+        },
+        ready: function () {
+          this.data.each(function (obj) {});
+          //addCss
+        },
+      };
+
+      let chart = {
+        view: "chart",
+        type: "bar",
+        value: "#age#",
+        xAxis: {
+          template: "#age#",
+          title: "Age",
+        },
+        data: webix.copy(users),
+      };
+
+      let treetable = {
+        view: "treetable",
+        id: "treetable",
+        select: "cell",
+        columns: [
+          { id: "id", header: "" },
+          {
+            id: "title",
+            header: "Title",
+            template: "{common.treetable()} #title#",
+            fillspace: true,
+          },
+          {
+            id: "price",
+            header: "Price",
+            fillspace: true,
+          },
+        ],
+        scrollX: false,
+      };
+
+      let multiview = {
+        view: "multiview",
+        cells: [
+          { id: "Dashboard", cols: [datatable, form] },
+          { id: "Users", rows: [toolbar, usersList, chart] },
+          { id: "Products", rows: [treetable] },
+          { id: "Admin", template: "" },
+        ],
+      };
+
       let main = {
-        cols: [{ rows: [list, label] }, { view: "resizer" }, datatable, form],
+        cols: [{ rows: [list, label] }, { view: "resizer" }, multiview],
       };
 
       let footer = {
@@ -213,6 +378,12 @@
       webix.ui({
         rows: [header, main, footer],
       });
+
+      let tree = $$("treetable");
+      tree.load("products.js").then(function (data) {
+        tree.openAll();
+      });
+      // or ready
     </script>
   </body>
 </html>
