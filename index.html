@@ -15,7 +15,6 @@
       href="http://cdn.webix.com/edge/webix.css"
     />
     <link rel="stylesheet" type="css" href="codebase/skins/material.css" />
-    <script type="text/javascript" src="./users.js"></script>
 
     <style type="text/css">
       .webix_template {
@@ -104,6 +103,10 @@
           onAfterSelect: function (id) {
             $$(id).show();
           },
+        },
+        ready: function () {
+          const id = this.getFirstId();
+          this.select(id);
         },
         data: ["Dashboard", "Users", "Products", "Admin"],
       };
@@ -210,20 +213,7 @@
             cols: [
               {
                 view: "button",
-                value: "Add new",
-                css: "webix_primary",
-                click: function () {
-                  const form = $$("myform");
-                  if (form.validate()) {
-                    let values = form.getValues();
-                    $$("mydata").add(values);
-                    webix.message("The form is completed properly");
-                  }
-                },
-              },
-              {
-                view: "button",
-                value: "Update",
+                value: "Save",
                 css: "webix_primary",
                 click: function () {
                   const form = $$("myform");
@@ -231,6 +221,11 @@
                   let values = form.getValues();
                   if (values.id) {
                     data.updateItem(values.id, values);
+                  } else {
+                    if (form.validate()) {
+                      $$("mydata").add(values);
+                      webix.message("The form is completed properly");
+                    }
                   }
                 },
               },
@@ -309,7 +304,7 @@
         template:
           "#name# from #country# <span class='webix_icon wxi-close removeBtn'></span>",
         css: "userslist",
-        data: webix.copy(users),
+        url: "users.js",
         onClick: {
           removeBtn: function (event, id) {
             this.remove(id);
@@ -334,7 +329,7 @@
           template: "#age#",
           title: "Age",
         },
-        data: webix.copy(users),
+        url: "users.js",
       };
 
       let treetable = {
@@ -357,9 +352,9 @@
         ],
         scrollX: false,
         url: "products.js",
-        ready: function(){
+        ready: function () {
           this.openAll();
-        }
+        },
       };
 
       let multiview = {
