@@ -14,7 +14,7 @@
       type="text/css"
       href="http://cdn.webix.com/edge/webix.css"
     />
-    <link rel="stylesheet" type="text/css" href="codebase/skins/material.css" />
+    <link rel="stylesheet" type="css" href="codebase/skins/material.css" />
     <script type="text/javascript" src="./users.js"></script>
 
     <style type="text/css">
@@ -50,6 +50,13 @@
         background-color: #f4f5f9;
       }
       .myhover.webix_cell {
+        background: rgb(181, 228, 217);
+      }
+      .userslist .webix_list_item {
+        display: flex;
+        justify-content: space-between;
+      }
+      .highlight {
         background: rgb(181, 228, 217);
       }
     </style>
@@ -300,17 +307,22 @@
         view: "list",
         id: "usersList",
         template:
-          "#name# from #country# <span class='webix_icon wxi-close'></span>",
+          "#name# from #country# <span class='webix_icon wxi-close removeBtn'></span>",
+        css: "userslist",
         data: webix.copy(users),
         onClick: {
-          "wxi-close": function (e, id) {
+          removeBtn: function (event, id) {
             this.remove(id);
             return false;
           },
         },
         ready: function () {
-          this.data.each(function (obj) {});
-          //addCss
+          this.data.each(function (obj) {
+            for (let i = 0; obj.id <= 5; i++) {
+              $$("usersList").addCss(obj.id, "highlight");
+              return false;
+            }
+          });
         },
       };
 
@@ -344,6 +356,10 @@
           },
         ],
         scrollX: false,
+        url: "products.js",
+        ready: function(){
+          this.openAll();
+        }
       };
 
       let multiview = {
@@ -378,12 +394,6 @@
       webix.ui({
         rows: [header, main, footer],
       });
-
-      let tree = $$("treetable");
-      tree.load("products.js").then(function (data) {
-        tree.openAll();
-      });
-      // or ready
     </script>
   </body>
 </html>
