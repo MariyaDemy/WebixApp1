@@ -312,9 +312,9 @@
           },
         },
         ready: function () {  
-          for (let index = 0; index <= 5; index++){
-            this.data.getIdByIndex(index);
-            this.addCss(index, "highlight");
+          for (let index = 0; index < 5; index++){
+            let id = this.data.getIdByIndex(index);
+            this.addCss(id, "highlight");
           }       
         },
       };
