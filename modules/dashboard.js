@@ -14,7 +14,7 @@ let datatable = {
     {
       id: "categoryId",
       collection: options,
-      header: ["Category", { content: "textFilter" }],
+      header: ["Category", { content: "selectFilter" }],
       sort: "string",
     },
     {
@@ -50,12 +50,9 @@ let datatable = {
   hover: "myhover",
   scheme: {
     $init: function (obj) {
-      console.log(obj)
-      obj.categoryId = (
-          Math.floor(Math.random() * 4) + 1
-        ).toString();
-      obj.rating = obj.rating.replace(',', '.');
-      obj.votes = obj.votes.replace(',','');      
+      obj.categoryId = (Math.floor(Math.random() * 4) + 1).toString();
+      obj.rating = obj.rating.replace(",", ".");
+      obj.votes = obj.votes.replace(",", "");
     },
   },
 };
@@ -105,8 +102,11 @@ let form = {
           value: "Save",
           css: "webix_primary",
           click: function () {
-              $$("myform").save();
-              webix.message("The form is completed properly");          
+            let form = $$("myform");
+            if (form.validate()) {
+              form.save();
+              webix.message("The form is completed properly");
+            }
           },
         },
         {
@@ -122,7 +122,7 @@ let form = {
                 const form = $$("myform");
                 form.clear();
                 form.clearValidation();
-                $$('mydata').unselectAll();
+                $$("mydata").unselectAll();
               });
           },
         },

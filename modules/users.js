@@ -1,3 +1,20 @@
+let countries = [
+  "USA",
+  "Germany",
+  "Canada",
+  "Russia",
+  "China",
+  "France",
+  "Italy",
+  "Spain",
+];
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+function random(arr) {
+  return arr[getRandomInt(0, arr.length - 1)];
+}
+
 let toolbar = {
   view: "toolbar",
   cols: [
@@ -36,24 +53,7 @@ let toolbar = {
       maxWidth: 100,
       css: "webix_primary",
       click: function () {
-        let countries = [
-          "USA",
-          "Germany",
-          "Canada",
-          "Russia",
-          "China",
-          "France",
-          "Italy",
-          "Spain",
-        ];
-        function getRandomInt(min, max) {
-          return Math.floor(Math.random() * (max - min + 1)) + min;
-        }
-        function random(arr) {
-          return arr[getRandomInt(0, arr.length - 1)];
-        }
         $$("usersList").add({
-          id: this.id + 1,
           name: "Aurora",
           age: (Math.floor(Math.random() * 100) + 1).toString(),
           country: random(countries),
@@ -83,10 +83,10 @@ let usersList = {
     },
   },
   scheme: {
-    $init: function (obj) {    
-        if (obj.age < 26) {
-          $$("usersList").addCss(obj.id, "yellow");          
-        }
+    $init: function (obj) {
+      if (obj.age < 26) {
+        $$("usersList").addCss(obj.id, "yellow");
+      }
     },
   },
 };
