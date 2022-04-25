@@ -311,13 +311,11 @@
             return false;
           },
         },
-        ready: function () {
-          this.data.each(function (obj) {
-            for (let i = 0; obj.id <= 5; i++) {
-              $$("usersList").addCss(obj.id, "highlight");
-              return false;
-            }
-          });
+        ready: function () {  
+          for (let index = 0; index <= 5; index++){
+            this.data.getIdByIndex(index);
+            this.addCss(index, "highlight");
+          }       
         },
       };
 
