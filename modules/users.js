@@ -82,19 +82,11 @@ let usersList = {
       return false;
     },
   },
-  ready: function () {
-    for (let index = 0; index < 5; index++) {
-      let id = this.data.getIdByIndex(index);
-      this.addCss(id, "highlight");
-    }
-  },
   scheme: {
-    $init: function (obj) {
-      this.each(function (obj) {
+    $init: function (obj) {    
         if (obj.age < 26) {
-          $$("usersList").addCss(obj.id, "yellow");
+          $$("usersList").addCss(obj.id, "yellow");          
         }
-      });
     },
   },
 };

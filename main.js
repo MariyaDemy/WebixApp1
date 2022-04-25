@@ -43,9 +43,6 @@ let multiview = {
   });
 
   $$("myform").bind($$("mydata"));
-  $$("myform").attachEvent("onChange", function () {
-    this.save();
-  });
 
   $$("mydata").registerFilter(
     $$("selector"),
@@ -55,7 +52,7 @@ let multiview = {
         if (filter == 2) return year < 2000;
         if (filter == 3) return year > 2000 && year < 2010;
         if (filter == 4) return year > 2010;
-        else return year;
+        else return year === year;
       },
     },
     {

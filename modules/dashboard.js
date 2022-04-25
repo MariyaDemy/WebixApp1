@@ -50,11 +50,12 @@ let datatable = {
   hover: "myhover",
   scheme: {
     $init: function (obj) {
-      this.each(function (obj) {
-        return (obj.categoryId = (
+      console.log(obj)
+      obj.categoryId = (
           Math.floor(Math.random() * 4) + 1
-        ).toString());
-      });
+        ).toString();
+      obj.rating = obj.rating.replace(',', '.');
+      obj.votes = obj.votes.replace(',','');      
     },
   },
 };
@@ -101,6 +102,15 @@ let form = {
       cols: [
         {
           view: "button",
+          value: "Save",
+          css: "webix_primary",
+          click: function () {
+              $$("myform").save();
+              webix.message("The form is completed properly");          
+          },
+        },
+        {
+          view: "button",
           value: "Clear",
           click: function () {
             webix
@@ -112,6 +122,7 @@ let form = {
                 const form = $$("myform");
                 form.clear();
                 form.clearValidation();
+                $$('mydata').unselectAll();
               });
           },
         },
@@ -119,18 +130,18 @@ let form = {
     },
     { view: "spacer" },
   ],
-  // rules: {
-  //   title: webix.rules.isNotEmpty,
-  //   year: function (value) {
-  //     return value >= 1970 && value <= today.getFullYear();
-  //   },
-  //   rating: function (value) {
-  //     return value != 0 && webix.rules.isNotEmpty(value);
-  //   },
-  //   votes: function (value) {
-  //     return value < 100000;
-  //   },
-  // },
+  rules: {
+    title: webix.rules.isNotEmpty,
+    year: function (value) {
+      return value >= 1970 && value <= today.getFullYear();
+    },
+    rating: function (value) {
+      return value != 0 && webix.rules.isNotEmpty(value);
+    },
+    votes: function (value) {
+      return value < 100000;
+    },
+  },
 };
 
 let tabs = {
