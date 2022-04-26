@@ -1,3 +1,7 @@
+let usersCollection = new webix.DataCollection({
+  url: "users.js"
+});
+
 let countries = [
   "USA",
   "Germany",
@@ -53,7 +57,7 @@ let toolbar = {
       maxWidth: 100,
       css: "webix_primary",
       click: function () {
-        $$("usersList").add({
+        usersCollection.add({
           name: "Aurora",
           age: (Math.floor(Math.random() * 100) + 1).toString(),
           country: random(countries),
@@ -75,10 +79,9 @@ let usersList = {
   template:
     "#name#, #age#, from #country# <span class='webix_icon wxi-close removeBtn'></span>",
   css: "userslist",
-  url: "users.js",
   onClick: {
     removeBtn: function (event, id) {
-      this.remove(id);
+      usersCollection.remove(id);
       return false;
     },
   },
@@ -103,4 +106,4 @@ let chart = {
   yAxis: {}
 };
 
-export { toolbar, usersList, chart };
+export { usersCollection, toolbar, usersList, chart };

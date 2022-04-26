@@ -1,9 +1,10 @@
 import { header } from "./modules/header.js";
 import { list, label } from "./modules/sidelist.js";
-import { datatable, form, tabs } from "./modules/dashboard.js";
-import { toolbar, usersList, chart } from "./modules/users.js";
+import { categoriesCollection, datatable, form, tabs } from "./modules/dashboard.js";
+import { usersCollection, toolbar, usersList, chart } from "./modules/users.js";
 import { treetable } from "./modules/products.js";
 import { footer } from "./modules/footer.js";
+import {categoriesTable, categoriesForm } from "./modules/admin.js";
 
 let multiview = {
   view: "multiview",
@@ -11,7 +12,7 @@ let multiview = {
     { id: "Dashboard", cols: [{ rows: [tabs, datatable] }, form] },
     { id: "Users", rows: [toolbar, usersList, chart] },
     { id: "Products", rows: [treetable] },
-    { id: "Admin", template: "" },
+    { id: "Admin", cols: [categoriesTable, categoriesForm] },
   ],
 };
 
@@ -65,7 +66,9 @@ $$("mydata").registerFilter(
   }
 );
 
-$$("chart").sync($$("usersList"), function () {
+
+$$("usersList").sync(usersCollection);
+$$("chart").sync(usersCollection, function () {
   this.group({
     by: "country",
     map: {
@@ -74,3 +77,7 @@ $$("chart").sync($$("usersList"), function () {
   });
   this.sort("people", "asc");
 });
+
+$$("categoriesTable").sync(categoriesCollection);
+
+

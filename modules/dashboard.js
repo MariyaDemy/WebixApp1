@@ -1,3 +1,7 @@
+let categoriesCollection = new webix.DataCollection({
+  data: options
+});
+
 let datatable = {
   view: "datatable",
   id: "mydata",
@@ -13,7 +17,7 @@ let datatable = {
     },
     {
       id: "categoryId",
-      collection: options,
+      collection: categoriesCollection,
       header: ["Category", { content: "selectFilter" }],
       sort: "text",
     },
@@ -94,6 +98,13 @@ let form = {
       name: "votes",
       invalidMessage: "Enter a number less than 100000",
     },
+    {view:"richselect",
+    label:"Categories",
+    options:{
+      data: categoriesCollection
+     }
+     
+  },
     {
       margin: 15,
       cols: [
@@ -160,4 +171,4 @@ let tabs = {
   },
 };
 
-export { datatable, form, tabs };
+export { categoriesCollection, datatable, form, tabs };
