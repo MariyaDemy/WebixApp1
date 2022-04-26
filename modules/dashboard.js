@@ -15,7 +15,7 @@ let datatable = {
       id: "categoryId",
       collection: options,
       header: ["Category", { content: "selectFilter" }],
-      sort: "string",
+      sort: "text",
     },
     {
       id: "votes",

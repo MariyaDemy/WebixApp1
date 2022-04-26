@@ -100,8 +100,7 @@ let chart = {
     template: "#country#",
     title: "Country",
   },
-  yAxis: {},
-  url: "users.js",
+  yAxis: {}
 };
 
 export { toolbar, usersList, chart };
