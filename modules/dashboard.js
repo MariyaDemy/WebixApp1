@@ -1,5 +1,5 @@
 let categoriesCollection = new webix.DataCollection({
-  data: options
+  data: options,
 });
 
 let datatable = {
@@ -98,13 +98,14 @@ let form = {
       name: "votes",
       invalidMessage: "Enter a number less than 100000",
     },
-    {view:"richselect",
-    label:"Categories",
-    options:{
-      data: categoriesCollection
-     }
-     
-  },
+    {
+      view: "richselect",
+      label: "Categories",
+      options: {
+        data: categoriesCollection,
+      },
+      name: "categoryId",
+    },
     {
       margin: 15,
       cols: [

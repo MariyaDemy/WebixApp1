@@ -80,4 +80,8 @@ $$("chart").sync(usersCollection, function () {
 
 $$("categoriesTable").sync(categoriesCollection);
 
+// console.log($$("mydata").config)
+
+// webix.debug({ events:true }); 
+
 
