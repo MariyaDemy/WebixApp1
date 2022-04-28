@@ -55,13 +55,15 @@ let categoriesForm = {
         value: "Save",
         css: "webix_primary",
         click: function () {
-          let form = $$("categoriesForm");
-          let value = form.getValues();
-          if (value.id && form.validate()) {
-            categoriesCollection.updateItem(value.id, value);
-          } else if (form.validate()){
-            categoriesCollection.add(value);
+          let form = $$("categoriesForm");          
+          if (form.validate()) {
+            const values = form.getValues();
+            if(values.id){
+               categoriesCollection.updateItem(values.id, values);
+            } else {
+              categoriesCollection.add(values);
             form.clear();
+            }                
           }
         },
       },
