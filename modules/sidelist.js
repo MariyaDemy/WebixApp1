@@ -3,6 +3,7 @@ let list = {
   scroll: false,
   maxWidth: 200,
   select: true,
+  css: "sidelist",
   on: {
     onAfterSelect: function (id) {
       $$(id).show();
